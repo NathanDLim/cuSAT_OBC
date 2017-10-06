@@ -1,0 +1,10 @@
+*.o
+*.bin
+*.elf
+*.a
+[Dd]ebug*/
+[Rr]elease*/
+.cproject
+.project
+.settings*/
+*.launch
