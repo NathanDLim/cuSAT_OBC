@@ -17,6 +17,7 @@
 #include <at91/commons.h>
 
 
+
 #define ENABLE_MAIN_TRACES 1
 #if ENABLE_MAIN_TRACES
 	#define MAIN_TRACE_INFO			TRACE_INFO
@@ -31,6 +32,27 @@
 	#define MAIN_TRACE_ERROR		TRACE_ERROR
 	#define MAIN_TRACE_FATAL		TRACE_FATAL
 #endif
+
+/* List of all possible tasks on the system. */
+enum task {
+	ADC 		= 0,
+	COMM 		= 1,
+	PAYLOAD 	= 2,
+	GPS 		= 3,
+	HOUSEKEEP 	= 4,
+};
+
+/*
+ * Matrix for determining which tasks should be active during each mode.
+ * The index of the masks follows enum mode defined in obc.h.
+ *
+ * ex. If mode_mask[1] refers to SUN_POINTING mode.
+ * In order to stop task 0 from being run during sun pointing mode, and run all other tasks, we set
+ * 		mode_mask[1] = 0b00000001
+ *
+ * The numbering of the tasks are shown in enum task, where each entry represents the bit number.
+ */
+const unsigned char mode_mask[] = {0b01001, 0b11011, 0b11101, 0b00001};
 
 
 void taskMain() {
