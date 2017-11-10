@@ -16,6 +16,9 @@
 #include <at91/utility/exithandler.h>
 #include <at91/commons.h>
 
+#include "adc.h"
+#include "obc.h"
+
 
 
 #define ENABLE_MAIN_TRACES 1
@@ -32,28 +35,6 @@
 	#define MAIN_TRACE_ERROR		TRACE_ERROR
 	#define MAIN_TRACE_FATAL		TRACE_FATAL
 #endif
-
-/* List of all possible tasks on the system. */
-enum task {
-	ADC 		= 0,
-	COMM 		= 1,
-	PAYLOAD 	= 2,
-	GPS 		= 3,
-	HOUSEKEEP 	= 4,
-};
-
-/*
- * Matrix for determining which tasks should be active during each mode.
- * The index of the masks follows enum mode defined in obc.h.
- *
- * ex. If mode_mask[1] refers to SUN_POINTING mode.
- * In order to stop task 0 from being run during sun pointing mode, and run all other tasks, we set
- * 		mode_mask[1] = 0b00000001
- *
- * The numbering of the tasks are shown in enum task, where each entry represents the bit number.
- */
-const unsigned char mode_mask[] = {0b01001, 0b11011, 0b11101, 0b00001};
-
 
 void taskMain() {
 	WDT_startWatchdogKickTask(10 / portTICK_RATE_MS, FALSE);
@@ -93,11 +74,13 @@ int main() {
 	LED_wave(1);
 	LED_waveReverse(1);
 
-	printf("\t main: Starting main task.. \n\r");
-	xTaskGenericCreate(taskMain, (const signed char*)"taskMain", 1024, NULL, configMAX_PRIORITIES-2, &taskMainHandle, NULL, NULL);
+	obc_main();
 
-	printf("\t main: Starting scheduler.. \n\r");
-	vTaskStartScheduler();
+//	printf("\t main: Starting main task.. \n\r");
+//	xTaskGenericCreate(taskMain, (const signed char*)"taskMain", 1024, NULL, configMAX_PRIORITIES-2, &taskMainHandle, NULL, NULL);
+//
+//	printf("\t main: Starting scheduler.. \n\r");
+//	vTaskStartScheduler();
 
 	// This part should never be reached.
 	printf("\t main: Waiting in an infinite loop. \n\r");

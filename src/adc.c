@@ -8,14 +8,28 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <freertos/semphr.h>
+#include <stdio.h>
 
-#define ADC_DELAY 1000
-
-void task_adc(void *arg) {
-
+void task_attitude(void *arg)
+{
 	for (;;) {
+		printf("doing attitude control\n");
+		vTaskDelay(1);
+	}
+}
 
+void task_detumble(void *arg)
+{
+	for (;;) {
+		printf("doing detumbling\n");
+		vTaskDelay(10);
+	}
+}
 
-		vTaskDelay(ADC_DELAY);
+void task_rebase_adc(void *arg)
+{
+	for (;;) {
+		printf("rebasing ADC from GPS data\n");
+		vTaskSuspend(NULL);
 	}
 }

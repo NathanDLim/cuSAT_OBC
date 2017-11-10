@@ -13,6 +13,12 @@ struct adc_data {
 
 };
 
+struct attitude {
 
+};
+
+void task_attitude(void *arg);
+void task_detumble(void *arg);
+void task_rebase_adc(void *arg);
 
 #endif /* ADC_H_ */

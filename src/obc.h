@@ -5,8 +5,9 @@
  *      Author: admin
  */
 
-#ifndef OBC_H_
-#define OBC_H_
+
+// choose whether system goes into debug mode or not
+#define _DEBUG
 
 /*
  * Bit selection.
@@ -16,6 +17,8 @@
  * ... etc
  */
 #define BIT(x) (1 << (x))
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 
 /* List of all possible Satellite modes */
 enum mode {
@@ -47,7 +50,7 @@ struct obc {
 };
 
 /* Our global obc variable */
-struct obc;
+struct obc obc;
 
+void obc_main(void);
 
-#endif /* OBC_H_ */
