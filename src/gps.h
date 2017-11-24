@@ -5,4 +5,8 @@
  *      Author: admin
  */
 
+struct gps_data {
+
+};
+
 void task_gps(void *arg);

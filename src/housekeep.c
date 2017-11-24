@@ -15,6 +15,7 @@ void task_housekeep(void *arg)
 
 	for (;;) {
 		printf("Now performing Housekeeping task\n");
+		fflush(stdout);
 		vTaskDelay(delay);
 	}
 

@@ -26,6 +26,7 @@ enum mode {
 	SUN_POINTING,
 	NADIR_POINTING,
 	SAFETY,
+	NUM_MODES,
 };
 
 struct vector {
