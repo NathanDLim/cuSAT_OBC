@@ -41,25 +41,25 @@
 /* List of tasks on the system that can be turned on and off. */
 enum task {
 	// gather and store sensor data
-	HOUSEKEEP	= 0,
+	HOUSEKEEP,			// 0
 	// calculate attitude controls
-	ATTITUDE	= 1,
+	ATTITUDE,			// 1
 	// stabilize satellite
-	DETUMBLE 	= 2,
+	DETUMBLE,			// 2
 	// rebase attitude controls from current GPS data
-	REBASE_ADC	= 3,
+	REBASE_ADC,			// 3
 	// gather GPS data
-	GPS			= 4,
+	GPS,				// 4
 	// receive data from payload
-	PAYLOAD_RX	= 5,
+	PAYLOAD_RX,			// 5
 	// process payload data
-	PAYLOAD_PRO = 6,
+	PAYLOAD_PRO,		// 6
 	// receive communication data
-	COMM_RX		= 7,
+	COMM_RX,			// 7
 	// handle communication commands
-	COMM_HANDLE = 8,
+	COMM_HANDLE,		// 8
 	// send data to ground station
-	DATA_TX		= 9,
+	DATA_TX,			//9
 	NUM_TASKS,
 };
 
@@ -101,7 +101,7 @@ void mode_switching(void *arg) {
 				//printf("suspend task %i\n", i + 1);
 			}
 		}
-		fflush(stdout);
+		//fflush(stdout);
 
 		// once the mode has been changed, we can suspend this task until the next time
 		// we need to change modes

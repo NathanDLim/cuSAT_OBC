@@ -11,7 +11,7 @@
 
 void task_housekeep(void *arg)
 {
-	const int delay = 1000/portTICK_RATE_MS;//(300000 / portTICK_RATE_MS) // every 5 minutes
+	const int delay = (300000 / portTICK_RATE_MS) // every 5 minutes
 
 	for (;;) {
 		printf("Now performing Housekeeping task\n");
