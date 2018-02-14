@@ -5,68 +5,56 @@
  *      Author: admin
  */
 
-#include <freertos/FreeRTOS.h>
-#include <freertos/task.h>
-#include <freertos/semphr.h>
-#include <freertos/queue.h>
+//#include <freertos/FreeRTOS.h>
+//#include <freertos/task.h>
+//#include <freertos/semphr.h>
+//#include <freertos/queue.h>
+#include <FreeRTOS.h>
+#include <task.h>
+#include <semphr.h>
+#include <queue.h>
 #include <stdio.h>
 
 #include "adc.h"
 #include "obc.h"
+#include "gps.h"
 
-xSemaphoreHandle adc_mutex;
-
-static struct adc_data adc_data;
-
-void init_adc()
-{
-	if (adc_mutex == NULL)
-		return;
-
-	adc_mutex = xSemaphoreCreateMutex();
-	if (adc_mutex == NULL)
-		printf("Error creating ADC mutex!");
-}
-
-void task_attitude(void *arg)
+/*
+ * The Attitude and Determination Control (ADC) task.
+ *
+ * Data owned:
+ *
+ * In: A handle to a queue. All messaged to the adc task come through this queue.
+ */
+void task_adc(void *arg)
 {
 	xQueueHandle queue = *(xQueueHandle *)arg;
 	struct queue_message message;
 
-	fflush(stdout);
-	init_adc();
 	for (;;) {
+
+		// We do a non-blocking check to see if there is a message waiting in the queue
 		if (xQueueReceive(queue, &message, 0) == pdTRUE) {
-			// message received
-			printf("ADC received message: id = %i, data = %i\n", message.id, message.data);
+			switch (message.id) {
+				case ADC_CMD_SUN_POINT:
+					debug("ADC switching to sun pointing\n");
+					break;
+				case ADC_CMD_NADIR_POINT:
+					debug("ADC switching to nadir pointing\n");
+					break;
+				case ADC_CMD_SET_REACT_SPEED:
+					debug("Setting the reaction wheel speed to %li\n", message.data);
+					break;
+				default:
+					error("Error in ADC message");
+					break;
+			}
 		}
-		printf("doing attitude control\n");
+
+		printf("time = %li\n", gps_get_timestamp());
+		fflush(stdout);
 		vTaskDelay(100);
 	}
 }
 
-void task_detumble(void *arg)
-{
-	init_adc();
-	for (;;) {
-		printf("doing detumbling\n");
-		vTaskDelay(1000);
-	}
-}
-
-void task_rebase_adc(void *arg)
-{
-	init_adc();
-	for (;;) {
-		printf("rebasing ADC from GPS data\n");
-		vTaskSuspend(NULL);
-	}
-}
-
-void adc_get_data(struct adc_data data)
-{
-	xSemaphoreTake(&adc_mutex, portMAX_DELAY);
-	memcpy(&data, &adc_data, sizeof(struct adc_data));
-	xSempaphoreGive(&adc_mutex);
-}
 

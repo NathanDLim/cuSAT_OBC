@@ -8,17 +8,17 @@
 #ifndef ADC_H_
 #define ADC_H_
 
-/* Stores all of the data necessary for ADC  */
-struct adc_data {
 
+// A list of the commands that can be sent to the adc task
+enum adc_commands {
+	// Configure the pointing target
+	ADC_CMD_SUN_POINT,
+	ADC_CMD_NADIR_POINT,
+	// Set the reaction wheel's speed
+	ADC_CMD_SET_REACT_SPEED,
+	ADC_CMD_MAX,
 };
 
-struct attitude {
-
-};
-
-void task_attitude(void *arg);
-void task_detumble(void *arg);
-void task_rebase_adc(void *arg);
+void task_adc(void *arg);
 
 #endif /* ADC_H_ */
