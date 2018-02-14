@@ -29,8 +29,20 @@ enum mode {
 	NUM_MODES,
 };
 
-/* Our global obc variable */
-struct obc obc;
+// All potential obc commands
+enum obc_command {
+	SUN_POINT,
+	NADIR_POINT,
+	BEGIN_IMAGE,
+	DOWNLINK,
+	EDIT_PARAM,
+	MAX_CMD,
+};
+
+struct queue_message {
+	int id;
+	int data;
+};
 
 void obc_main(void);
 

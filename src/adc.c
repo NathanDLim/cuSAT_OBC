@@ -8,9 +8,11 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <freertos/semphr.h>
+#include <freertos/queue.h>
 #include <stdio.h>
 
 #include "adc.h"
+#include "obc.h"
 
 xSemaphoreHandle adc_mutex;
 
@@ -28,9 +30,16 @@ void init_adc()
 
 void task_attitude(void *arg)
 {
+	xQueueHandle queue = *(xQueueHandle *)arg;
+	struct queue_message message;
+
 	fflush(stdout);
 	init_adc();
 	for (;;) {
+		if (xQueueReceive(queue, &message, 0) == pdTRUE) {
+			// message received
+			printf("ADC received message: id = %i, data = %i\n", message.id, message.data);
+		}
 		printf("doing attitude control\n");
 		vTaskDelay(100);
 	}
